@@ -1,0 +1,42 @@
+Package: UniFORM
+Type: Package
+Title: Universal ImmunoFluorescence nORMalization for Multiplex Tissue Imaging
+Version: 1.0.0
+Authors@R: c(
+    person("Mark Kunlun", "Wang", 
+           email = "wangmar@ohsu.edu", 
+           role = c("aut"),
+           comment = "Original Python implementation"),
+    person("Asim", "Waqas", 
+           email = "asim.waqas@moffitt.org", 
+           role = c("aut", "cre"),
+           comment = "R implementation")
+    )
+Description: UniFORM_R provides robust normalization methods for multiplex 
+    immunofluorescence data. It uses histogram-based cross-correlation and 
+    Gaussian Mixture Model analysis to harmonize intensity measurements across 
+    different samples, batches, and experimental conditions. This R 
+    implementation maintains full compatibility with the original Python 
+    UniFORM pipeline while following R package conventions.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.0
+Depends: 
+    R (>= 4.0.0)
+Imports: 
+    R6 (>= 2.5.0),
+    ggplot2 (>= 3.3.0),
+    dplyr (>= 1.0.0),
+    tidyr (>= 1.1.0),
+    mixtools (>= 1.2.0),
+    signal (>= 0.7.0)
+Suggests: 
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    devtools
+VignetteBuilder: knitr
+URL: https://github.com/Waasem/UniFORM_R
+BugReports: https://github.com/Waasem/UniFORM_R/issues
+Config/testthat/edition: 3
