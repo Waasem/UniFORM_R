@@ -19,7 +19,37 @@ UniFORM addresses the critical need for standardization in multiplex immunofluor
 
 Ensure you have R version 4.0.0 or higher installed on your system.
 
-### Install Required Packages
+### Option 1: Automated Installation (Recommended)
+
+Use the provided installation script for automatic setup:
+
+```bash
+# Navigate to the UniFORM_R directory
+cd /UniFORM/UniFORM_R
+
+# Run the installation script
+Rscript install.R
+```
+
+Or from within R:
+
+```r
+# Navigate to the UniFORM_R directory and run
+source("install.R")
+```
+
+The installation script will:
+- Check your R version compatibility
+- Install all required dependencies automatically
+- Install the UniFORM_R package
+- Run tests to verify installation
+- Provide installation status and next steps
+
+### Option 2: Manual Installation
+
+If you prefer manual installation:
+
+#### Step 1: Install Required Packages
 
 ```r
 # Install required CRAN packages
@@ -30,20 +60,34 @@ install.packages(c(
   "tidyr",        # Data tidying
   "mixtools",     # Gaussian mixture models
   "signal",       # Signal processing for cross-correlation
-  "testthat"      # Testing framework
+  "testthat",     # Testing framework
+  "devtools"      # Package development tools
 ))
 ```
 
-### Install UniFORM_R
-
-Since this is a local package, you can install it using:
+#### Step 2: Install UniFORM_R Package
 
 ```r
 # Install from local directory
-devtools::install("path/to/UniFORM_R")
+devtools::install("/UniFORM/UniFORM_R")
 
 # Or if you're in the UniFORM_R directory
 devtools::install(".")
+```
+
+### Verify Installation
+
+After installation, verify everything works correctly:
+
+```r
+# Load the package
+library(UniFORM)
+
+# Run tests to verify installation
+testthat::test_dir("tests/")
+
+# Check if all functions are available
+?uniform_calculate_histogram
 ```
 
 ## Quick Start
@@ -246,18 +290,59 @@ testthat::test_dir("tests/")
 testthat::test_file("tests/basic_func_test.R")
 ```
 
+## Project Structure
+
+```
+UniFORM_R/
+├── install.R               # Automated installation script
+├── DESCRIPTION             # Package metadata
+├── NAMESPACE              # Package exports
+├── README.md              # This file
+├── R/                     # Source code
+│   ├── core.R            # Histogram and GMM functions
+│   ├── normalization.R   # Normalization algorithms
+│   ├── model.R           # UniFORM R6 class
+│   └── dataloading.R     # Data loading utilities
+├── tests/                 # Test suite
+│   └── basic_func_test.R # Basic functionality tests
+└── examples/              # Usage examples
+    └── basic_usage.R     # Complete workflow example
+```
+
 ## Troubleshooting
 
-### Common Issues
+### Installation Issues
 
-1. **Package installation errors**:
+1. **R version incompatibility**:
+   ```r
+   # Check your R version
+   R.Version()
+   # Upgrade R if version < 4.0.0
+   ```
+
+2. **Package installation errors**:
    ```r
    # Try installing dependencies individually
    install.packages("mixtools")
    install.packages("signal")
+   
+   # Clear package cache if needed
+   remove.packages(c("mixtools", "signal"))
+   install.packages(c("mixtools", "signal"))
    ```
 
-2. **Data loading issues**:
+3. **Permission errors on Linux/Mac**:
+   ```bash
+   # Make install script executable
+   chmod +x install.R
+   
+   # Run with proper permissions
+   sudo Rscript install.R
+   ```
+
+### Runtime Issues
+
+1. **Data loading issues**:
    ```r
    # Check your CSV file structure
    data <- read.csv("your_file.csv")
@@ -265,7 +350,7 @@ testthat::test_file("tests/basic_func_test.R")
    colnames(data)
    ```
 
-3. **Memory issues with large datasets**:
+2. **Memory issues with large datasets**:
    ```r
    # Process markers individually or reduce bin_counts
    results <- uniform_model$uniform_calculate_histogram(
@@ -274,11 +359,21 @@ testthat::test_file("tests/basic_func_test.R")
    )
    ```
 
+3. **Plotting issues**:
+   ```r
+   # Install graphics dependencies
+   install.packages(c("ggplot2", "gridExtra"))
+   
+   # Check plot output device
+   dev.list()
+   ```
+
 ### Getting Help
 
-1. Check function documentation: `?uniform_calculate_histogram`
-2. Review example usage: `examples/basic_usage.R`
-3. Run tests to verify installation: `testthat::test_dir("tests/")`
+1. **Check function documentation**: `?uniform_calculate_histogram`
+2. **Review example usage**: `examples/basic_usage.R`
+3. **Run tests to verify installation**: `testthat::test_dir("tests/")`
+4. **Check installation log**: Re-run `install.R` to see detailed output
 
 ## Comparison with Python Version
 
@@ -291,14 +386,16 @@ This R implementation maintains full compatibility with the original Python UniF
 | Cross-correlation | scipy.signal | signal |
 | Plotting | matplotlib | ggplot2 |
 | Object-Oriented | Python classes | R6 classes |
+| Installation | pip install | install.R script |
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
+4. Ensure all tests pass (`testthat::test_dir("tests/")`)
+5. Update documentation
+6. Submit a pull request
 
 ## License
 
@@ -316,12 +413,12 @@ for Multiplex Tissue Imaging. [Journal/Preprint].
 ## Authors
 
 - **Mark Kunlun Wang** - Original Python implementation - wangmar@ohsu.edu
-- **R Implementation Team** - R conversion and maintenance - asim.waqas@moffitt.org
+- **Asim Waqas** - R implementation and maintenance - asim.waqas@moffitt.org
 
 ## Acknowledgments
 
-- Original UniFORM Python implementation by Chang Lab
-- UniFORM_R implementation by Schabath Lab
+- Original UniFORM Python implementation by Chang Lab (OHSU)
+- UniFORM_R implementation by Schabath Lab (Moffitt Cancer Center)
 - R package structure follows Bioconductor guidelines
 - GMM analysis adapted from mixtools package
 - Cross-correlation implementation uses signal package
